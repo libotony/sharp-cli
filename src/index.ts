@@ -20,7 +20,7 @@ const argv = yargs
         }
     }).argv
 
-const bin = path.join(__dirname, '../bin/thor')
+const bin = path.join(__dirname, '../bin/thor-darwin-amd64')
 const solo = new SoloRunner(bin, argv.port)
 
 solo.start()
