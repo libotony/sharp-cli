@@ -1,0 +1,26 @@
+{
+  "name": "sharp-runner",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "bin": "dist/index.js",
+  "scripts": {
+    "build": "tsc -p .",
+    "prepare": "npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "tony.li",
+  "license": "LGPL-3.0",
+  "devDependencies": {
+    "@types/node": "^12.7.2",
+    "@types/yargs": "^13.0.2",
+    "ts-node": "^8.3.0",
+    "tslint": "^5.18.0",
+    "typescript": "^3.5.3"
+  },
+  "dependencies": {
+    "debug": "^4.1.1",
+    "yargs": "^13.3.0"
+  }
+}
