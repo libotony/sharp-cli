@@ -1,10 +1,12 @@
 {
   "name": "sharp-runner",
-  "version": "1.0.0",
-  "description": "",
+  "version": "1.0.0-beta.1",
+  "description": "run solo in the background and run tests in your project",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "bin": "dist/index.js",
+  "bin": {
+    "sharp-runner": "dist/index.js"
+  },
   "scripts": {
     "build": "tsc -p .",
     "prepare": "npm run build",
@@ -22,5 +24,20 @@
   "dependencies": {
     "debug": "^4.1.1",
     "yargs": "^13.3.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/libotony/sharp-runner.git"
+  },
+  "bugs": {
+    "url": "https://github.com/libotony/sharp-runner/issues"
+  },
+  "homepage": "https://github.com/libotony/sharp-runner#readme",
+  "keywords": [
+    "connex",
+    "sharp",
+    "test",
+    "contract",
+    "test"
+  ]
 }
