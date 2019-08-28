@@ -1,3 +1,3 @@
-# Sharp Runner
+# Sharp CLI
 
-Run solo in the background and run tests in your project.
+Command line interface which helps running sharp tests
