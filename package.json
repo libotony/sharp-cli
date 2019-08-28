@@ -1,14 +1,14 @@
 {
-  "name": "sharp-runner",
+  "name": "sharp-cli",
   "version": "1.0.0-beta.1",
   "description": "run solo in the background and run tests in your project",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
-    "sharp-runner": "dist/index.js"
+    "sharp-cli": "dist/index.js"
   },
   "scripts": {
-    "build": "tsc -p .",
+    "build": "rm -fr dist && tsc -p .",
     "prepare": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
