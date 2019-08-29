@@ -2,8 +2,6 @@
   "name": "sharp-cli",
   "version": "1.0.0-beta.1",
   "description": "run solo in the background and run tests in your project",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
   "bin": {
     "sharp-cli": "dist/index.js"
   },
@@ -15,6 +13,7 @@
   "author": "tony.li",
   "license": "LGPL-3.0",
   "devDependencies": {
+    "@types/mkdirp": "^0.5.2",
     "@types/node": "^12.7.2",
     "@types/yargs": "^13.0.2",
     "ts-node": "^8.3.0",
@@ -23,6 +22,8 @@
   },
   "dependencies": {
     "debug": "^4.1.1",
+    "mkdirp": "^0.5.1",
+    "sharp-compile": "git+https://github.com/libotony/sharp-compile.git",
     "yargs": "^13.3.0"
   },
   "repository": {

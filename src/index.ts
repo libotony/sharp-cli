@@ -2,15 +2,21 @@
 import * as yargs from 'yargs'
 
 import { startTest } from './test-runner'
+import { compileFlow } from './compile-flow'
 
 const args = yargs
     .scriptName('sharp-cli')
-    .command({
+    .command<{filename: string}>({
         command: 'compile [filename]',
         describe: 'compile contracts',
-        builder: (thisYargs) => thisYargs.demandOption('filename'),
+        builder: (thisYargs: any) => thisYargs.demandOption('filename'),
         handler: (argv) => {
-            console.log(argv)
+            compileFlow([argv.filename]).catch(e => {
+                const head = '\n===============ERROR===================\n\n'
+                const tail = '\n\n=======================================\n'
+                process.stderr.write(head + e.message + tail)
+                process.exit(-1)
+            })
         }
     })
     .command<{ task: string; port: number}>({
