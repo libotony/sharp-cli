@@ -51,4 +51,6 @@ const args = yargs
     })
     .demandCommand(1, 'You need at least one command before moving on')
     .help()
+    .alias('h', 'help')
+    .alias('v', 'version')
     .argv
