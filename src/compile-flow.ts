@@ -116,7 +116,7 @@ export const compileFlow = async (options: CompileFlowOptions) => {
                     sourceMap: contractMeta.evm.bytecode.sourceMap,
                     deployedSourceMap: contractMeta.evm.deployedBytecode.sourceMap,
                     compiler: {
-                        name: 'sloc',
+                        name: 'solc',
                         version: solc.version()
                     },
                     devdoc: contractMeta.devdoc,
