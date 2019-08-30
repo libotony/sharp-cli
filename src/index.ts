@@ -2,34 +2,46 @@
 import * as yargs from 'yargs'
 
 import { startTest } from './test-runner'
-import { compileFlow } from './compile-flow'
+import { compileFlow, makeOptions } from './compile-flow'
+const debug = require('debug')('sharp:cli')
 
 const args = yargs
     .scriptName('sharp-cli')
-    .command<{filename: string}>({
-        command: 'compile [filename]',
+    .pkgConf('sharp')
+    .command<{filename: string, [index: string]: any}>({
+        command: 'compile',
         describe: 'compile contracts',
-        builder: (thisYargs: any) => thisYargs.demandOption('filename'),
+        builder: (thisYargs: any) => thisYargs,
         handler: (argv) => {
-            compileFlow([argv.filename]).catch(e => {
+            (async () => {
+                const options = makeOptions(argv as any)
+                await compileFlow(options)
+            })().catch(e => {
+                debug('compile flow failed', e)
                 const head = '\n===============ERROR===================\n\n'
                 const tail = '\n\n=======================================\n'
                 process.stderr.write(head + e.message + tail)
-                process.exit(-1)
+                yargs.exit(-1, new Error('Compile failed'))
             })
         }
     })
     .command<{ task: string; port: number}>({
         command: 'test [task]',
-        describe: 'npm script to run for the test',
+        describe: 'run test task',
         builder: (thisYargs: any) => {
             return thisYargs
-                .demandOption('task')
+                .option({
+                    task: {
+                        type: 'string',
+                        describe: 'npm script to run for the test',
+                        default: 'sharp'
+                    }
+                })
                 .option({
                     port: {
                         type: 'number',
                         describe: 'port of solo node\'s api',
-                        default: 8669
+                        default: 8668
                     }
                 })
         },
