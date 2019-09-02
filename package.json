@@ -2,6 +2,8 @@
   "name": "sharp-cli",
   "version": "1.0.0-beta.1",
   "description": "run solo in the background and run tests in your project",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "bin": {
     "sharp-cli": "dist/index.js"
   },
