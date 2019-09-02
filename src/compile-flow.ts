@@ -124,6 +124,7 @@ export const compileFlow = async (options: CompileFlowOptions) => {
                     updatedAt: (new Date()).toISOString()
                 }
                 fs.writeSync(fd, JSON.stringify(info, null, 4), null, 'utf-8')
+                fs.closeSync(fd)
             }
         }
         process.stderr.write(`All done! Saved to ${buildDirectory}\n`)
