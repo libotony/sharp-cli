@@ -81,7 +81,7 @@ export const compileFlow = async (options: CompileFlowOptions) => {
 
     process.stderr.write('Compiling contracts......\n')
     for (const file of options.contracts) {
-        const output = compile(solc, file, contractsDirectory)
+        const output = compile(solc, { file, contractsDirectory })
 
         let warning = ''
         if (output.errors && output.errors.length) {
