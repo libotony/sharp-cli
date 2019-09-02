@@ -3,6 +3,7 @@ import * as yargs from 'yargs'
 
 import { startTest } from './test-runner'
 import { compileFlow, makeOptions } from './compile-flow'
+import { execScript } from './exec-script'
 const debug = require('debug')('sharp:cli')
 
 const args = yargs
@@ -47,6 +48,35 @@ const args = yargs
         },
         handler: (argv) => {
             startTest(argv.task, argv.port)
+        }
+    })
+    .command<{ file: string; endpoint: string; }>({
+        command: 'exec [file]',
+        describe: 'execute a connex script',
+        builder: (thisYargs: any) => {
+            return thisYargs
+                .demandOption('file')
+                .option({
+                    endpoint: {
+                        type: 'string',
+                        describe: 'thor node\'s api endpoint',
+                        default: 'http://localhost:8669'
+                    }
+                })
+        },
+        handler: (argv) => {
+            execScript(argv.file, argv.endpoint)
+                .then(() => {
+                    // just want to do a successfully exit
+                    yargs.exit(0, null!)
+                })
+                .catch(e => {
+                    debug('compile flow failed', e)
+                    const head = '\n===============ERROR===================\n\n'
+                    const tail = '\n\n=======================================\n'
+                    process.stderr.write(head + e.message + tail)
+                    yargs.exit(-1, new Error('Execute script failed'))
+                })
         }
     })
     .demandCommand(1, 'You need at least one command before moving on')

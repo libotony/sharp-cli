@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 import { spawn } from 'child_process'
 import * as path from 'path'
 const debug = require('debug')('sharp:runner:task')

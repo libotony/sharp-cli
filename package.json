@@ -21,6 +21,8 @@
     "typescript": "^3.5.3"
   },
   "dependencies": {
+    "@vechain/connex-framework": "^1.1.0",
+    "@vechain/connex.driver-nodejs": "^1.1.4",
     "debug": "^4.1.1",
     "mkdirp": "^0.5.1",
     "sharp-compile": "git+https://github.com/libotony/sharp-compile.git",
