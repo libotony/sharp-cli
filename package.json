@@ -1,7 +1,7 @@
 {
   "name": "sharp-cli",
   "version": "1.0.0-beta.1",
-  "description": "run solo in the background and run tests in your project",
+  "description": "Sharp command line helper",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "bin": {
@@ -30,19 +30,19 @@
     "sharp-compile": "git+https://github.com/libotony/sharp-compile.git",
     "yargs": "^13.3.0"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/libotony/sharp-runner.git"
-  },
-  "bugs": {
-    "url": "https://github.com/libotony/sharp-runner/issues"
-  },
-  "homepage": "https://github.com/libotony/sharp-runner#readme",
   "keywords": [
     "connex",
     "sharp",
     "test",
     "contract",
     "test"
-  ]
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/libotony/sharp-cli.git"
+  },
+  "bugs": {
+    "url": "https://github.com/libotony/sharp-cli/issues"
+  },
+  "homepage": "https://github.com/libotony/sharp-cli#readme"
 }
