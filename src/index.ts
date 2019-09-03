@@ -9,7 +9,7 @@ const debug = require('debug')('sharp:cli')
 const args = yargs
     .scriptName('sharp-cli')
     .pkgConf('sharp')
-    .command<{filename: string, [index: string]: any}>({
+    .command({
         command: 'compile',
         describe: 'compile contracts',
         builder: (thisYargs: any) => thisYargs,
