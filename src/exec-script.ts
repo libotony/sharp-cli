@@ -4,12 +4,6 @@ import { Framework } from '@vechain/connex-framework'
 import { Driver, SimpleWallet, SimpleNet } from '@vechain/connex.driver-nodejs'
 const debug = require('debug')('sharp:exec')
 
-interface Global extends NodeJS.Global {
-    connex: Connex
-}
-
-declare var global: Global
-
 export const execScript = async (file: string, endpoint: string) => {
     const filePath = path.join(process.cwd(), file)
 
@@ -22,6 +16,7 @@ export const execScript = async (file: string, endpoint: string) => {
         const connex = new Framework(Framework.guardDriver(driver))
 
         global.connex = connex
+        global.wallet = wallet
     } catch (e) {
         throw new Error('Prepare failed: ' + e.message)
     }
