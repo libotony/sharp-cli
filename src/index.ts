@@ -50,7 +50,7 @@ const args = yargs
             startTest(argv.task, argv.port)
         }
     })
-    .command<{ file: string; endpoint: string; }>({
+    .command<{ file: string; endpoint: string; require: string[] }>({
         command: 'exec [file]',
         describe: 'execute a connex script',
         builder: (thisYargs: any) => {
@@ -61,11 +61,18 @@ const args = yargs
                         type: 'string',
                         describe: 'thor node\'s api endpoint',
                         default: 'http://localhost:8669'
+                    },
+                    require: {
+                        type: 'string',
+                        describe: 'required modules',
+                        array: true,
+                        alias: 'r',
+                        default: []
                     }
                 })
         },
         handler: (argv) => {
-            execScript(argv.file, argv.endpoint)
+            execScript(argv.file, argv.endpoint, argv.require)
                 .then(() => {
                     // just want to do a successfully exit
                     yargs.exit(0, null!)

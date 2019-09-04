@@ -4,11 +4,21 @@ import { Framework } from '@vechain/connex-framework'
 import { Driver, SimpleWallet, SimpleNet } from '@vechain/connex.driver-nodejs'
 const debug = require('debug')('sharp:exec')
 
-export const execScript = async (file: string, endpoint: string) => {
+export const execScript = async (file: string, endpoint: string, requires: string[]) => {
     const filePath = path.join(process.cwd(), file)
 
     try {
         fs.accessSync(filePath, fs.constants.F_OK | fs.constants.R_OK)
+
+        for (const r of requires) {
+            let mPath = r
+            if (fs.existsSync(path.resolve(mPath)) || fs.existsSync(path.resolve(`${mPath}.js`))) {
+                mPath = path.resolve(mPath)
+                debug(`resolved ${r} to ${mPath}`)
+            }
+            require(mPath)
+            debug('loaded require: ', mPath)
+        }
 
         debug('prepare connex env')
         const wallet = new SimpleWallet()
