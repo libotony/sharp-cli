@@ -71,7 +71,7 @@ const args = yargs
                     yargs.exit(0, null!)
                 })
                 .catch(e => {
-                    debug('compile flow failed', e)
+                    debug('execute script failed', e)
                     const head = '\n===============ERROR===================\n\n'
                     const tail = '\n\n=======================================\n'
                     process.stderr.write(head + e.message + tail)
