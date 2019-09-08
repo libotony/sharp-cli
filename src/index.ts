@@ -42,7 +42,7 @@ const args = yargs
                     port: {
                         type: 'number',
                         describe: 'port of solo node\'s api',
-                        default: 8668
+                        default: 8669
                     }
                 })
         },

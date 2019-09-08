@@ -47,6 +47,7 @@ export const execScript = async (file: string, endpoint: string, requires: strin
         process.stderr.write('\n')
     }
 
+    process.env.THOR_REST = endpoint
     const con = await import(filePath)
     if (typeof con === 'function') {
         debug('module.exports = function')

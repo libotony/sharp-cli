@@ -39,7 +39,11 @@ export const startTest = (taskName: string, soloPort: number) => {
     debug('running task:', taskName)
     const child = spawn('npm', ['run', taskName], {
         cwd: process.cwd(),
-        stdio: 'inherit'
+        stdio: 'inherit',
+        env: {
+            ...process.env,
+            THOR_REST: 'http://127.0.0.1:' + soloPort
+        }
     })
 
     child.on('exit', (code, signal) => {
