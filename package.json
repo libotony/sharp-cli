@@ -3,7 +3,7 @@
   "version": "1.0.0-beta.1",
   "description": "Sharp command line helper",
   "main": "dist/index.js",
-  "types": "index.d.ts",
+  "types": "script.d.ts",
   "bin": {
     "sharp-cli": "dist/index.js"
   },
