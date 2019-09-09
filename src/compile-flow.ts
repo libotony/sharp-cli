@@ -2,6 +2,7 @@ import * as path from 'path'
 import * as fs from 'fs'
 import { sync as mkdirp } from 'mkdirp'
 import { compile, getSolidityCompiler } from 'sharp-compile'
+import { normalizeHex } from './utils'
 const debug = require('debug')('sharp:compile-flow')
 
 export interface CompileFlowOptions {
@@ -111,8 +112,8 @@ export const compileFlow = async (options: CompileFlowOptions) => {
                     contractName,
                     abi: contractMeta.abi,
                     metadata: contractMeta.metadata,
-                    bytecode: contractMeta.evm.bytecode.object,
-                    deployedBytecode: contractMeta.evm.deployedBytecode.object,
+                    bytecode: normalizeHex(contractMeta.evm.bytecode.object),
+                    deployedBytecode: normalizeHex(contractMeta.evm.deployedBytecode.object),
                     sourceMap: contractMeta.evm.bytecode.sourceMap,
                     deployedSourceMap: contractMeta.evm.deployedBytecode.sourceMap,
                     compiler: {
