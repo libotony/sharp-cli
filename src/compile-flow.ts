@@ -101,8 +101,6 @@ export const compileFlow = async (options: CompileFlowOptions) => {
             process.stderr.write(head + warning.replace(/\n$/, '') + tail)
         }
 
-        process.stderr.write('Saving contracts meta......\n')
-
         // FileName
         for (const [_, fileMeta] of Object.entries(output.contracts)) {
             // ContractName
@@ -128,6 +126,6 @@ export const compileFlow = async (options: CompileFlowOptions) => {
                 fs.closeSync(fd)
             }
         }
-        process.stderr.write(`All done! Saved to ${buildDirectory}\n`)
-   }
+    }
+    process.stderr.write(`All done! Saved to ${buildDirectory}\n`)
 }
