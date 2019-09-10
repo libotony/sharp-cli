@@ -30,11 +30,11 @@ const getSolo = () => {
     return fName
 }
 
-export const startTest = (taskName: string, soloPort: number) => {
+export const startTest = async (taskName: string, soloPort: number) => {
     const fName = getSolo()
     const solo = new SoloRunner(path.join(__dirname, '../thor-bin/', fName), soloPort)
 
-    solo.start()
+    await solo.start()
 
     debug('running task:', taskName)
     const child = spawn('npm', ['run', taskName], {
@@ -46,8 +46,11 @@ export const startTest = (taskName: string, soloPort: number) => {
         }
     })
 
-    child.on('exit', (code, signal) => {
-        debug(`child exited with code: ${code}, signal: ${signal}`)
-        solo.close()
+    return await new Promise<number>((resolve) => {
+        child.on('exit', (code, signal) => {
+            debug(`child exited with code: ${code}, signal: ${signal}`)
+            solo.close()
+            resolve(code === null ? 0 : code )
+        })
     })
 }

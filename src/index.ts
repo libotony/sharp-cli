@@ -47,7 +47,15 @@ const args = yargs
                 })
         },
         handler: (argv) => {
-            startTest(argv.task, argv.port)
+            startTest(argv.task, argv.port).then((code) => {
+                yargs.exit(code, null!)
+            }).catch(e => {
+                debug('running test failed', e)
+                const head = '\n===============ERROR===================\n\n'
+                const tail = '\n\n=======================================\n'
+                process.stderr.write(head + e.message + tail)
+                yargs.exit(-1, new Error('Test failed'))
+            })
         }
     })
     .command<{ file: string; endpoint: string; require: string[] }>({

@@ -25,11 +25,6 @@ export class SoloRunner extends EventEmitter {
     public start() {
         this.child = spawn(this.path, ['solo', '--on-demand', '--api-addr', '127.0.0.1:' + this.port], { stdio: ['ignore', 'pipe', 'pipe'] })
 
-        // Can not be spawned error emitted here other than synchronously
-        this.child.on('error', (e) => {
-            this.exited = true
-            this.emit('exit')
-        })
         this.child.on('exit', (code, signal) => {
             this.exited = true
             this.emit('exit')
@@ -41,6 +36,35 @@ export class SoloRunner extends EventEmitter {
 
         this.child.stdout!.on('data', (msg) => {
             debug(msg.toString().trim())
+        })
+
+        // 'Can not be spawned' error emitted by event other than synchronously
+        return new Promise((resolve, reject) => {
+            const child = this.child!
+
+            const onError = (e: Error) => {
+                detachEvents()
+                return reject(e)
+            }
+            const onStdout = (data: Buffer) => {
+                detachEvents()
+                if (data.toString().startsWith('Starting Thor solo')) {
+                    child.on('error', (e) => {
+                        debug('running solo node error', e)
+                    })
+                    return resolve()
+                } else {
+                    return reject(new Error('Failed to start solo node'))
+                }
+            }
+
+            const detachEvents = () => {
+                child.off('error', onError)
+                child!.stdout!.off('data', onStdout)
+            }
+
+            child.once('error', onError)
+            child.stdout!.once('data', onStdout)
         })
     }
 
