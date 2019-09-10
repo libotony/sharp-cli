@@ -10,7 +10,10 @@ const getSolo = () => {
         // win32
         switch (process.platform) {
             case 'darwin':
-                return 'darwin'
+            case 'linux':
+                return process.platform
+            case 'win32':
+                return 'windows'
             default:
                 throw new Error(`unsupported platform ${process.platform}!`)
         }
