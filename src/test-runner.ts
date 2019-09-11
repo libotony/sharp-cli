@@ -5,9 +5,6 @@ import { SoloRunner } from './solo-runner'
 
 const getSolo = () => {
     const getPlatform = () => {
-        // to be supported
-        // linux
-        // win32
         switch (process.platform) {
             case 'darwin':
             case 'linux':
@@ -28,7 +25,8 @@ const getSolo = () => {
         }
     }
 
-    const fName = `thor-${getPlatform()}-${getArch()}`
+    const suffix = process.platform === 'win32' ? '.exe' : ''
+    const fName = `thor-${getPlatform()}-${getArch()}${suffix}`
 
     return fName
 }
