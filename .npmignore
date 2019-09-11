@@ -1,0 +1,8 @@
+.vscode/
+tsconfig.json
+tslint.json
+.nojekyll
+coverage
+.nyc_output
+.travis.yml
+src/

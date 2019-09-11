@@ -1,7 +1,7 @@
 import * as path from 'path'
 import * as fs from 'fs'
 import { sync as mkdirp } from 'mkdirp'
-import { compile, getSolidityCompiler } from 'sharp-compile'
+import { compile, getSolidityCompiler } from '@libotony/sharp-compile'
 import { normalizeHex } from './utils'
 const debug = require('debug')('sharp:compile-flow')
 

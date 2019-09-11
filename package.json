@@ -1,8 +1,7 @@
 {
-  "name": "sharp-cli",
+  "name": "@libotony/sharp-cli",
   "version": "1.0.0-beta.1",
   "description": "Sharp command line helper",
-  "main": "dist/index.js",
   "types": "script.d.ts",
   "bin": {
     "sharp-cli": "dist/index.js"
@@ -23,11 +22,11 @@
     "typescript": "^3.5.3"
   },
   "dependencies": {
+    "@libotony/sharp-compile": "^1.0.0-beta.1",
     "@vechain/connex-framework": "^1.1.0",
     "@vechain/connex.driver-nodejs": "^1.1.4",
     "debug": "^4.1.1",
     "mkdirp": "^0.5.1",
-    "sharp-compile": "git+https://github.com/libotony/sharp-compile.git",
     "yargs": "^13.3.0"
   },
   "keywords": [
