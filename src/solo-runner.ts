@@ -54,7 +54,7 @@ export class SoloRunner extends EventEmitter {
                     })
                     return resolve()
                 } else {
-                    return reject(new Error('Failed to start solo node'))
+                    return reject(new Error('Failed to start solo node: ' + data.toString().trim()))
                 }
             }
 
