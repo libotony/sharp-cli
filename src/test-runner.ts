@@ -38,7 +38,7 @@ export const startTest = async (taskName: string, soloPort: number) => {
     await solo.start()
 
     debug('running task:', taskName)
-    const child = spawn('npm', ['run', taskName], {
+    const child = spawn(/^win/.test(process.platform) ? 'npm.cmd' : 'npm', ['run', taskName], {
         cwd: process.cwd(),
         stdio: 'inherit',
         env: {
