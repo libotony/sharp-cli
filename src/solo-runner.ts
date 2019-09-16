@@ -59,8 +59,8 @@ export class SoloRunner extends EventEmitter {
             }
 
             const detachEvents = () => {
-                child.off('error', onError)
-                child!.stdout!.off('data', onStdout)
+                child.removeListener('error', onError)
+                child!.stdout!.removeListener('data', onStdout)
             }
 
             child.once('error', onError)
