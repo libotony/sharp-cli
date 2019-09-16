@@ -76,7 +76,9 @@ export const makeOptions = (options: {
 
 export const compileFlow = async (options: CompileFlowOptions) => {
     process.stderr.write('Preparing compiler......\n')
-    const solc = await getSolidityCompiler(options.solc.version)
+    const solc = await getSolidityCompiler(options.solc.version).catch((e: Error) => {
+        return Promise.reject(new Error('failed to load compiler: ' + e.message))
+    })
     const contractsDirectory = options.contractsDirectory
     const buildDirectory = options.buildDirectory
 
