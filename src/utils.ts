@@ -1,3 +1,5 @@
+import chalk from 'chalk'
+
 export const normalizeHex = (input: string) => {
     if (input.startsWith('0x')) {
         return input
@@ -7,4 +9,10 @@ export const normalizeHex = (input: string) => {
     } else {
         return '0x' + input
     }
+}
+
+export const colors = {
+    waring: chalk.keyword('orange'),
+    info: chalk.keyword('green'),
+    error: chalk.keyword('red')
 }

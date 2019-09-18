@@ -2,8 +2,9 @@
 import * as yargs from 'yargs'
 
 import { startTest } from './test-runner'
-import { compileFlow, makeOptions } from './compile-flow'
+import { compileFlow, normalizeOptions } from './compile-flow'
 import { execScript } from './exec-script'
+import { colors } from './utils'
 const debug = require('debug')('sharp:cli')
 
 const args = yargs
@@ -15,12 +16,12 @@ const args = yargs
         builder: (thisYargs: any) => thisYargs,
         handler: (argv) => {
             (async () => {
-                const options = makeOptions(argv as any)
+                const options = normalizeOptions(argv as any)
                 await compileFlow(options)
             })().catch(e => {
                 debug('compile flow failed', e)
-                const head = '\n===============ERROR===================\n\n'
-                const tail = '\n\n=======================================\n'
+                const head = colors.error('\n===============ERROR===================\n\n')
+                const tail = colors.error('\n\n=======================================\n')
                 process.stderr.write(head + e.message + tail)
                 yargs.exit(-1, new Error('Compile failed'))
             })
@@ -51,8 +52,8 @@ const args = yargs
                 yargs.exit(code, null!)
             }).catch(e => {
                 debug('running test failed', e)
-                const head = '\n===============ERROR===================\n\n'
-                const tail = '\n\n=======================================\n'
+                const head = colors.error('\n===============ERROR===================\n\n')
+                const tail = colors.error('\n\n=======================================\n')
                 process.stderr.write(head + e.message + tail)
                 yargs.exit(-1, new Error('Test failed'))
             })
@@ -87,8 +88,8 @@ const args = yargs
                 })
                 .catch(e => {
                     debug('execute script failed', e)
-                    const head = '\n===============ERROR===================\n\n'
-                    const tail = '\n\n=======================================\n'
+                    const head = colors.error('\n===============ERROR===================\n\n')
+                    const tail = colors.error('\n\n=======================================\n')
                     process.stderr.write(head + e.message + tail)
                     yargs.exit(-1, new Error('Execute script failed'))
                 })

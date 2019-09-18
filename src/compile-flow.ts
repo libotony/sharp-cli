@@ -2,7 +2,7 @@ import * as path from 'path'
 import * as fs from 'fs'
 import { sync as mkdirp } from 'mkdirp'
 import { compile, getSolidityCompiler } from '@libotony/sharp-compile'
-import { normalizeHex } from './utils'
+import { normalizeHex, colors } from './utils'
 const debug = require('debug')('sharp:compile-flow')
 
 export interface CompileFlowOptions {
@@ -14,7 +14,7 @@ export interface CompileFlowOptions {
     }
 }
 
-export const makeOptions = (options: {
+export const normalizeOptions = (options: {
     contracts_directory?: string;
     build_directory?: string;
     contracts?: string[];
@@ -98,16 +98,29 @@ export const compileFlow = async (options: CompileFlowOptions) => {
         }
 
         if (!!warning) {
-            const head = '\n==============WARNING=================\n\n'
-            const tail = '\n\n=======================================\n'
+            const head = colors.waring('\n==============WARNING=================\n\n')
+            const tail = colors.waring('\n\n=======================================\n')
             process.stderr.write(head + warning.replace(/\n$/, '') + tail)
         }
 
+        const refs: string[] = []
         // FileName
         for (const [_, fileMeta] of Object.entries(output.contracts)) {
             // ContractName
             for (const [contractName, contractMeta] of Object.entries(fileMeta)) {
                 const fd = fs.openSync(path.join(buildDirectory, contractName + '.json'), 'w')
+                debug(contractMeta.evm.bytecode.linkReferences)
+                // Get all link references
+                // {
+                //     "name.sol": {
+                //         "contractName": [ReferenceObject]
+                //     }
+                // }
+                for (const [_ , references] of Object.entries(contractMeta.evm.bytecode.linkReferences)) {
+                    for (const [r, _] of Object.entries(references as object)) {
+                        refs.push(r)
+                    }
+                }
                 const info = {
                     contractName,
                     abi: contractMeta.abi,
@@ -127,6 +140,13 @@ export const compileFlow = async (options: CompileFlowOptions) => {
                 fs.writeSync(fd, JSON.stringify(info, null, 4), null, 'utf-8')
                 fs.closeSync(fd)
             }
+        }
+        if (refs.length) {
+            const head = colors.info('\n===========LINK REFERENCE==============\n\n')
+            const tail = colors.info('\n\n=======================================\n')
+            const tipStart = 'External libraries refound: \n\n    '
+            const tipEnd = '\n\nSet libraries in options to link them.'
+            process.stderr.write(head + tipStart + refs.join(', ') + tipEnd + tail)
         }
     }
     process.stderr.write(`All done! Saved to ${buildDirectory}\n`)
