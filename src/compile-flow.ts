@@ -1,82 +1,13 @@
 import * as path from 'path'
 import * as fs from 'fs'
-import { sync as mkdirp } from 'mkdirp'
 import { compile, getSolidityCompiler } from '@libotony/sharp-compile'
+import { CompileFlowOptions } from './compile-options'
 import { normalizeHex, colors } from './utils'
 const debug = require('debug')('sharp:compile-flow')
 
-export interface CompileFlowOptions {
-    contractsDirectory: string,
-    contracts: string[],
-    buildDirectory: string,
-    solc: {
-        version: string
-    }
-}
-
-export const normalizeOptions = (options: {
-    contracts_directory?: string;
-    build_directory?: string;
-    contracts?: string[];
-    solc?: {
-        version?: string
-    };
-}): CompileFlowOptions => {
-    let contractsDirectory
-    let buildDirectory
-    if (options.contracts_directory) {
-        if (path.isAbsolute(options.contracts_directory)) {
-            contractsDirectory = options.contracts_directory
-        } else {
-            contractsDirectory = path.join(process.cwd(), options.contracts_directory)
-        }
-    } else {
-        contractsDirectory = path.join(process.cwd(), './contracts')
-    }
-    fs.readdirSync(contractsDirectory)
-
-    if (options.build_directory) {
-        if (path.isAbsolute(options.build_directory)) {
-            buildDirectory = options.build_directory
-        } else {
-            buildDirectory = path.join(process.cwd(), options.build_directory)
-        }
-    } else {
-        buildDirectory = path.join(process.cwd(), './build')
-    }
-    mkdirp(buildDirectory)
-
-    if (!options.contracts || !Array.isArray(options.contracts) || options.contracts.length === 0) {
-        throw new Error('options: contracts entry needed')
-    }
-    for (const c of options.contracts) {
-        if (typeof c !== 'string') {
-            throw new Error('options.contracts: entry should be string')
-        }
-        fs.accessSync(path.join(contractsDirectory, c), fs.constants.R_OK)
-    }
-
-    const solc = {
-        version: ''
-    }
-    if (options.solc && options.solc.version && typeof options.solc.version === 'string') {
-        solc.version = options.solc.version
-    }
-
-    const o =  {
-        contractsDirectory,
-        contracts: options.contracts,
-        buildDirectory,
-        solc
-    }
-    debug('option:', o)
-
-    return o
-}
-
 export const compileFlow = async (options: CompileFlowOptions) => {
     process.stderr.write('Preparing compiler......\n')
-    const solc = await getSolidityCompiler(options.solc.version).catch((e: Error) => {
+    const solc = await getSolidityCompiler(options.solcVer).catch((e: Error) => {
         return Promise.reject(new Error('failed to load compiler: ' + e.message))
     })
     const contractsDirectory = options.contractsDirectory
@@ -84,7 +15,7 @@ export const compileFlow = async (options: CompileFlowOptions) => {
 
     process.stderr.write('Compiling contracts......\n')
     for (const file of options.contracts) {
-        const output = compile(solc, { file, contractsDirectory })
+        const output = compile(solc, { file, options: options.solc, contractsDirectory })
 
         let warning = ''
         if (output.errors && output.errors.length) {
@@ -109,7 +40,6 @@ export const compileFlow = async (options: CompileFlowOptions) => {
             // ContractName
             for (const [contractName, contractMeta] of Object.entries(fileMeta)) {
                 const fd = fs.openSync(path.join(buildDirectory, contractName + '.json'), 'w')
-                debug(contractMeta.evm.bytecode.linkReferences)
                 // Get all link references
                 // {
                 //     "name.sol": {

@@ -1,6 +1,7 @@
 import * as fs from 'fs'
 import * as path from 'path'
 import { sync as mkdirp } from 'mkdirp'
+import { SolcOptions } from '@libotony/sharp-compile'
 const debug = require('debug')('sharp:compile-options')
 
 export interface CompileFlowOptions {
@@ -11,14 +12,6 @@ export interface CompileFlowOptions {
     solc: SolcOptions
 }
 
-export type SolcOptions = Partial<{
-    version: string,
-    evmVersion: 'homestead' | 'tangerineWhistle' | 'spuriousDragon' | 'byzantium' | 'constantinople' | 'petersburg',
-    libraries: {
-        [name: string]: string
-    },
-    optimizer: object
-}>
 // link optimizer's settings to solidity's doc
 // {
 //     enabled: boolean,
@@ -46,7 +39,7 @@ export const normalizeOptions = (options: {
     contracts?: string[];
     solc?: {
         version?: string
-    } & Partial<SolcOptions>;
+    } & SolcOptions;
 }): CompileFlowOptions => {
     let contractsDirectory
     let buildDirectory
@@ -104,12 +97,14 @@ export const normalizeOptions = (options: {
         }
 
         if (s.libraries) {
-            for (const [name, addr] of Object.entries(s.libraries)) {
-                if (typeof name !== 'string') {
-                    throw new Error('invalid library name: ' + name)
-                }
-                if (typeof addr !== 'string' || !/^0x[0-9a-fA-F]{40}$/i.test(addr)) {
-                    throw new Error('invalid library address: ' + addr)
+            for (const [_, libs] of Object.entries(s.libraries)) {
+                for (const [name, addr] of Object.entries(libs)) {
+                    if (typeof name !== 'string') {
+                        throw new Error('invalid library name: ' + name)
+                    }
+                    if (typeof addr !== 'string' || !/^0x[0-9a-fA-F]{40}$/i.test(addr)) {
+                        throw new Error('invalid library address: ' + addr)
+                    }
                 }
             }
             solc.libraries = s.libraries
@@ -127,7 +122,7 @@ export const normalizeOptions = (options: {
         solcVer,
         solc
     }
-    debug('option:', o)
+    debug('option:', JSON.stringify(o, null, 2))
 
     return o
 }

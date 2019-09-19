@@ -2,7 +2,8 @@
 import * as yargs from 'yargs'
 
 import { startTest } from './test-runner'
-import { compileFlow, normalizeOptions } from './compile-flow'
+import { normalizeOptions } from './compile-options'
+import { compileFlow } from './compile-flow'
 import { execScript } from './exec-script'
 import { colors } from './utils'
 const debug = require('debug')('sharp:cli')
