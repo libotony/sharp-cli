@@ -1,6 +1,6 @@
 # Sharp CLI
 
-Command line interface which helps running sharp tests
+Command line interface that compiling contracts/running tests/executing scripts
 
 ## Commands
 
@@ -21,9 +21,17 @@ Commands:
     "build_directory": "[string] directory to save built contract info",
     "contracts": "[Array<string>] relative path(to contracts directory) of contracts to compile",
     "solc": {
-        "version": "[string] semver version requirement",
-    },
-    "task": "[string] npm script to run for the test",
-    "port": "[number] port of solo node's ap"
+        "version": "[string](optional) semver version requirement",
+        "evmVersion": "[string](optional) version of the EVM to compile for",
+        "libraries": "[object](optional) addresses of the libraries",
+        "optimizer": "[object](optional) optimizer settings"
+    }
 }
 ```
+
+Sharp CLI relies [solc-js](https://github.com/ethereum/solc-js) for compiling contract sources, supports `evmVersion/libraries/optimizer` from the solidity compiler's standard JSON input, for more detailed info please refer to [JSON Input Description](https://solidity.readthedocs.io/en/v0.5.11/using-the-compiler.html#input-description).
+
+
+## Guide
+
+There is a project shows a step by step guide of using sharp, see [sharp-example-vip180](https://github.com/libotony/sharp-example-vip180).
